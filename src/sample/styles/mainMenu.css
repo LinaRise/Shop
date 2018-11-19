@@ -1,0 +1,6 @@
+.background{
+-fx-background-image:url(menuBackground.png);
+-fx-background-size:contain,cover;
+-fx-background-position:center center;
+-fx-background-repeat:stretch;
+}

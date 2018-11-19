@@ -1,0 +1,11 @@
+.background{
+    -fx-background-image:url(../assets/backMaterial.jpg);
+    -fx-background-size:cover,cover;
+    -fx-background-position:center center;
+    -fx-background-repeat:stretch;
+}
+#helpButton{
+    -fx-background-image:url(../assets/helpButton.png);
+    -fx-background-size:cover,cover;
+
+}
