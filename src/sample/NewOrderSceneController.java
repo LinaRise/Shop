@@ -1,10 +1,7 @@
 package sample;
 
-import com.jfoenix.controls.JFXTextField;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,17 +10,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import sample.AnimationAndDecor.AnimationAndDecor;
-import sample.addtionalClasses.Order;
 
-import java.awt.Toolkit;
+import javafx.scene.control.TextArea;
 
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileWriter;
+import java.awt.*;
 import java.io.IOException;
 
 public class NewOrderSceneController {
@@ -32,10 +24,7 @@ public class NewOrderSceneController {
     private TextField fioField;
 
     @FXML
-    private TextField emailField;
-
-    @FXML
-    private TextField orderField;
+    private TextArea orderField;
 
     @FXML
     private TextField measuresField;
@@ -68,8 +57,9 @@ public class NewOrderSceneController {
         } catch (IOException e) {
             System.out.println("Файл mainMenuScene.fxml не найден " );
             e.printStackTrace();
-        }Main.toClose(stage, "Нажав ОК Вы выйдете из основного меню ");
-    }
+        }Main.toClose(stage, "Нажав ОК Вы прекратите создание заказа ");
+        }
+
 
     public boolean ifInputIsValid (){
         String errorMessage = "";
@@ -77,9 +67,8 @@ public class NewOrderSceneController {
         if (fioField.getText() == null || fioField.getText().length() == 0) {
             errorMessage += "Нет доступного имени заказчика!\n";
         }
-        if ((telephoneField.getText() == null || telephoneField.getText().length() == 0)||
-                (emailField.getText()==null || telephoneField.getText().length()==0)) {
-            errorMessage += "Введите телефон или почту заказчика!\n";
+        if (telephoneField.getText() == null || telephoneField.getText().length() == 0){
+            errorMessage += "Нет доступного телефона заказчика!\n";
         }
         if (orderField.getText() == null || orderField.getText().length() == 0) {
             errorMessage += "Нет достпного описания заказа!\n";
@@ -112,9 +101,14 @@ public class NewOrderSceneController {
     private void saveButtonClick() {
 
         if (ifInputIsValid()) {
-            Order newOrder = new Order(fioField.getText(), telephoneField.getText(), emailField.getText(), orderField.getText(),
+            Order newOrder = new Order(fioField.getText(), telephoneField.getText(), orderField.getText(),
                     measuresField.getText(), stateBox.getValue().toString(), costField.getText());
             newOrder.addNewOrder();
+            clearFields();
+            if (Main.toClose((Stage) saveButton.getScene().getWindow(), "Нажав Ок вы прекратите создание заказа")) {
+                MainMenuSceneController scene = new MainMenuSceneController();
+                scene.mainMenuSceneCall();
+            }
         }
     }
 
@@ -134,6 +128,15 @@ public class NewOrderSceneController {
                 keyEvent.consume();
         }
     }
+
+    private void clearFields(){
+        fioField.clear();
+        telephoneField.clear();
+        orderField.clear();
+        measuresField.clear();
+        stateBox.setValue("");
+        costField.clear();
+    }
 //|| keyEvent.getCode() == KeyCode.BACK_SPACE || keyEvent.getCode() == KeyCode.DELETE))
 
 
@@ -144,14 +147,15 @@ public class NewOrderSceneController {
             saveButtonClick();
         });
 
+        cancelButton.setOnAction(event -> {
+            clearFields();
+        });
+
         list.add("Оплачено");
         list.add("Выполнено");
         list.add("Выдано клиенту");
         stateBox.setItems(list);
         stateBox.setValue("");
-
-
-
 
     }
 
