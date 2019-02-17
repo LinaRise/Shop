@@ -1,12 +1,12 @@
-package sample;
+package sample.AnimationAndDecor;
 
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class AnimationAndDecor {
+public class Decor {
 
    //метод для добавления своей иконки в сцену
-    static void addIcon(Stage stage,String pathToIcon){
+    public static void addIcon(Stage stage, String pathToIcon){
         stage.getIcons().add(new Image(pathToIcon));
     }
 }

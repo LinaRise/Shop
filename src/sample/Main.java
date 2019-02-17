@@ -10,6 +10,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import sample.AnimationAndDecor.AnimationAndDecor;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -19,35 +20,11 @@ public class Main extends Application {
     private TextField loginField;
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-       Parent root = FXMLLoader.load(getClass().getResource("fxml/loginScene.fxml"));
-        primaryStage.setTitle("Ателье");
-        Scene scene=new Scene(root,800,460);
-        scene.getStylesheets().add(0, "sample/styles/loginScene.css");
-       primaryStage.setResizable(false);
-       primaryStage.setScene(scene);
-        primaryStage.show();
-        toClose(primaryStage,"входа");
-
-
+    public void start(Stage stage) throws Exception{
+       LoginSceneController logscene=new LoginSceneController();
+       logscene.loginSceneCall();
     }
 
-    static void toClose(Stage stage,String text){
-
-        stage.setOnCloseRequest((WindowEvent regEx) -> {
-        regEx.consume();
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Выход");
-        alert.setHeaderText(text);
-        alert.setContentText("Вы уверены?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-
-            stage.close();
-        }
-    });
-
-    }
 
 
     public static void main(String[] args) {

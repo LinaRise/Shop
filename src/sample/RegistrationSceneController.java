@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import sample.addtionalClasses.User;
+import sample.AnimationAndDecor.AnimationAndDecor;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -40,15 +40,29 @@ public class RegistrationSceneController {
         } catch (IOException e) {
             System.out.println("Файл registrationScene.fxml не найден " );
         }
-        Scene scene = new Scene(root,800,460);
+        Scene scene = new Scene(root);
         regStage.setScene(scene);
         regStage.setResizable(false);
-        scene.getStylesheets().add(0, "sample/styles/loginScene.css");
+        scene.getStylesheets().add(0,"sample/styles/regScene.css");
+        AnimationAndDecor.addIcon(regStage, "sample/assets/needle.png");
         regStage.show();
-        Main.toClose(regStage,"Нажав ОК Вы выйдете из окна регистрации в приложении");
+        RegistrationSceneController.toClose(regStage);
     }
 
+    static void toClose(Stage stage){
+        stage.setOnCloseRequest((WindowEvent regEx) -> {
+            regEx.consume();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Выход");
+            alert.setHeaderText("Нажав ОК Вы прекратите создание аккаунта");
+            alert.setContentText("Вы уверены?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                stage.close();
 
+            }
+        });
+    }
 
 
 

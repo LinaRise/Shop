@@ -1,0 +1,16 @@
+#searchImg{
+    -fx-background-image:url(../assets/searchButton.png);
+
+}
+
+.background{
+    -fx-background-image:url(../assets/backMaterial.jpg);
+    -fx-background-size:cover,cover;
+    -fx-background-position:center center;
+    -fx-background-repeat:stretch;
+}
+
+.button{
+    -fx-background-color: #ffffff;
+    -fx-border-color: #6F0000;
+}

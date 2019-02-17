@@ -1,0 +1,9 @@
+
+# Created by .ignore support plugin (hsz.mobi)
+
+ /out
+ *.png
+ *.jpg
+ *.txt
+.idea
+assets

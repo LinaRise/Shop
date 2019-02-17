@@ -9,10 +9,13 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Optional;
 
 public class LoginSceneController {
+
 
     @FXML
     private TextField loginField;
@@ -29,13 +32,6 @@ public class LoginSceneController {
     private Hyperlink linkRegistrate;
 
 
-    public TextField getLoginField() {
-        return loginField;
-    }
-
-    public void setLoginField(TextField loginField) {
-        this.loginField = loginField;
-    }
 
     //метод выводящий сцену Входа
     void loginSceneCall(){
@@ -52,7 +48,10 @@ public class LoginSceneController {
             System.out.println("Файл  loginScene.fxml не найден " );
             e.printStackTrace();
         }LoginSceneController.toClose(stage);
+
     }
+
+
 
 
     static void toClose(Stage stage){
@@ -78,11 +77,22 @@ public class LoginSceneController {
     private boolean signingIn() {
         System.out.print("вы нажали кнопку войти");
         boolean isMainSceneOpen=false;
-        User a = new User(loginField.getText(), passwordField.getText());
-        if (a.checkData() == true) {
+         User user = new User(loginField.getText(), passwordField.getText());
+        if (user.checkData()) {
+            FileWriter writer= null;
+            try {
+                writer = new FileWriter("temp.txt",false);
+                writer.write(loginField.getText());
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             Stage stage=(Stage) buttonLogin.getScene().getWindow();
             stage.close();
-            setLoginField(loginField);
+
+
             //создаем новую сцену с выбором дальнейшего действия
             MainMenuSceneController mainMenu=new MainMenuSceneController();
             mainMenu.mainMenuSceneCall();

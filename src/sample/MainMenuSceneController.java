@@ -4,16 +4,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import sample.AnimationAndDecor.AnimationAndDecor;
 
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class MainMenuSceneController {
 
@@ -49,14 +52,36 @@ public class MainMenuSceneController {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setResizable(false);
+            scene.getStylesheets().add(0,"sample/styles/mainMenu.css");
             AnimationAndDecor.addIcon(stage, "sample/assets/needle.png");
             stage.show();
+            stage.setOnCloseRequest(event -> {
+                LoginSceneController logScene=new LoginSceneController();
+                logScene.loginSceneCall();
+            });
         } catch (IOException e) {
             System.out.println("Файл mainMenuScene.fxml не найден " );
             e.printStackTrace();
-        }Main.toClose(stage, "Нажав ОК Вы выйдете из основного меню ");
+        }//MainMenuSceneController.toClose(stage);
 
         }
+
+    static void toClose(Stage stage){
+        stage.setOnCloseRequest((WindowEvent regEx) -> {
+            regEx.consume();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Выход");
+            alert.setHeaderText("Нажав ОК Вы выйдете из основного меню ");
+            alert.setContentText("Вы уверены?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                LoginSceneController scene=new LoginSceneController();
+                scene.loginSceneCall();
+                stage.close();
+
+            }
+        });
+    }
 
 
 

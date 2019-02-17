@@ -9,17 +9,23 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import sample.AnimationAndDecor.AnimationAndDecor;
 import sample.addtionalClasses.Material;
 
 import javax.imageio.ImageIO;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class MaterialsSceneWorkerController {
     private ObservableList<Material> materialData = FXCollections.observableArrayList();
@@ -62,6 +68,8 @@ public class MaterialsSceneWorkerController {
     private Button chooser;
 
 
+
+
     //метод вызова сцены с каталогом материлов для работников
     void materialsWorkerSceneCall(){
         Stage stage = new Stage();
@@ -70,13 +78,30 @@ public class MaterialsSceneWorkerController {
             Parent root = FXMLLoader.load(getClass().getResource("fxml/matCatalogSceneW.fxml"));
             Scene scene = new Scene(root);
             stage.setScene(scene);
-           // stage.setResizable(false);
+            AnimationAndDecor.addIcon(stage, "sample/assets/needle.png");
             scene.getStylesheets().add(0, "sample/styles/materialsCatalogScene.css");
             stage.show();
         } catch (IOException e) {
             System.out.println("Файл  matCatalogSceneW.fxml не найден " );
             e.printStackTrace();
-        }Main.toClose(stage,"Нажав ОК Вы выйдете из каталога материалов");
+        }MaterialsSceneWorkerController.toClose(stage);
+    }
+
+    static void toClose(Stage stage) {
+        stage.setOnCloseRequest((WindowEvent regEx) -> {
+            regEx.consume();
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Выход");
+            alert.setHeaderText("Нажав ОК Вы выйдете из каталога материалов");
+            alert.setContentText("Вы уверены?");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                MainMenuSceneController scene = new MainMenuSceneController();
+                scene.mainMenuSceneCall();
+                stage.close();
+
+            }
+        });
     }
 
 //метод для заполнения таблицы материалов из файла
@@ -208,8 +233,12 @@ public class MaterialsSceneWorkerController {
     }
 
 
+
+
     @FXML
     void initialize(){
+
+
         matTableFillIn("material.txt");
         matTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)
                 -> showMaterialDetails(newValue));
@@ -222,14 +251,24 @@ public class MaterialsSceneWorkerController {
 
         chooser.setOnAction(event -> {
             FileChooser fc = new FileChooser();
-            fc.setInitialDirectory(new File("D:\\Alina\\проги на Kotlin\\Atelier2\\src\\sample\\assets"));
+            fc.setInitialDirectory(new File("sample.assets"));
             fc .getExtensionFilters().addAll(
                     new FileChooser.ExtensionFilter("PNG", "*.png"),
                     new FileChooser.ExtensionFilter("JPG", "*.jpg"));
             fc.setTitle("Open Resource File");
 
             File selectedFile=fc.showOpenDialog(null);
-
+            if (selectedFile != null) {
+                System.out.println("File Was Selected");
+                URL url = null;
+                try {
+                    url = selectedFile.toURI().toURL();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                materialImg.setImage(new Image(url.toExternalForm()));
+                //materialImg.setImage(new Image(selectedFile.getAbsolutePath()));
+            }
 
         });
 
